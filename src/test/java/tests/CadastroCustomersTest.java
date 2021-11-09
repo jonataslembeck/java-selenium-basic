@@ -10,11 +10,11 @@ import pages.BasePage;
 import pages.PesquisarCustomerPage;
 
 public class CadastroCustomersTest extends BasePage {
-	
+
+	String textoCadastro = "Teste Automacao";
 	WebDriver driver = getDriver();
 	PesquisarCustomerPage pesquisarCustomerPage = new PesquisarCustomerPage(driver);
 	AddCustomerPage addCustomerPage = new AddCustomerPage(driver);
-	
 	
 	@After
 	public void tearDown(){
@@ -24,30 +24,31 @@ public class CadastroCustomersTest extends BasePage {
 	@Test
 	public void testCadastraCustomerSucesso() {
 		cadastraCustomer();
-		String messageExpected = "Your data has been successfully stored into the database. Edit Customer or Go back to list";
-		Assert.assertEquals(messageExpected, addCustomerPage.getMessage());
+		pesquisarCustomerPage.setCustomerName(textoCadastro);
+		pesquisarCustomerPage.waitResultCustomerName(textoCadastro);
+		Assert.assertEquals(textoCadastro, pesquisarCustomerPage.getResultCustomerName());
 	}
 	
 	@Test	
 	public void testExcluirCustomerSucesso() {
 		cadastraCustomer();
-		addCustomerPage.clickGoBackToList();
-		pesquisarCustomerPage.setName("Teste Automação");
-		delay(2);
+		pesquisarCustomerPage.setCustomerName(textoCadastro);
+		pesquisarCustomerPage.waitResultCustomerName(textoCadastro);
 		pesquisarCustomerPage.selectAllCustomers();
 		pesquisarCustomerPage.clickDelete();
-		pesquisarCustomerPage.getMessageDelete().contains("Are you sure that you want to delete those");
 		pesquisarCustomerPage.clickConfirmaDelete();
+		delay(3);
 		
-		Assert.assertEquals("Your data has been successfully deleted from the database.", pesquisarCustomerPage.getMessageSucessDelete());
+		Assert.assertEquals(false, pesquisarCustomerPage.isVisibleResultCustomerName(textoCadastro));
 	}
 	
 	private void cadastraCustomer() {
 		pesquisarCustomerPage.accessPage();
+		pesquisarCustomerPage.clickOkCookie();
 		pesquisarCustomerPage.clickAddCustomer();
 		
-		addCustomerPage.setName("Teste Automação");
-		addCustomerPage.setLastName("Teste");
+		addCustomerPage.setCustomerName(textoCadastro);
+		addCustomerPage.setContactLastName("Teste");
 		addCustomerPage.setContactFirstName("Jonatas Lembeck");
 		addCustomerPage.setPhone("51 9999-9999");
 		addCustomerPage.setAddressLine1("Av Assis Brasil, 3970");
@@ -56,8 +57,11 @@ public class CadastroCustomersTest extends BasePage {
 		addCustomerPage.setState("RS");
 		addCustomerPage.setPostalCode("91000-000");
 		addCustomerPage.setCountry("Brasil");
-		addCustomerPage.setFromEmployeer("Fixter");
+		addCustomerPage.setSalesRepEmployeeNumber("2");
 		addCustomerPage.setCreditLimit(200.00);
-		addCustomerPage.clickSave();
+		addCustomerPage.setDeleted(2);
+		addCustomerPage.clickSaveChanges();
+
+		delay(3);
 	}
 }

@@ -2,6 +2,7 @@ package pages;
 
 import java.util.concurrent.TimeUnit;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,9 +16,11 @@ public class BasePage {
 
 	public static WebDriver getDriver() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Windows\\chromedriver.exe");
+		WebDriverManager.chromedriver().setup();
+		WebDriverManager.chromedriver().driverVersion("95.0.4638.69").setup(); // -> Força versão do driver
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}
 
@@ -49,6 +52,15 @@ public class BasePage {
 	public void waitVisibilityOfElementLocated(By locator) {
 		WebDriverWait wait = new WebDriverWait(driver, 5);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
+
+	public Boolean isVisible(By locator){
+		Boolean isPresent = driver.findElements(locator).size() > 0;
+		if (isPresent) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public static void delay(double segundos) {		

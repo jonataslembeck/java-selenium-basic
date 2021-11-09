@@ -6,30 +6,30 @@ import org.openqa.selenium.WebDriver;
 public class AddCustomerPage extends BasePage {
 
 	protected WebDriver driver;
-	private final By fieldName = By.id("field-customerName");
-	private final By fieldLastName = By.id("field-contactLastName");
-	private final By fieldContactFirstName = By.id("field-contactFirstName");
-	private final By fieldPhone = By.id("field-phone");
-	private final By fieldAddressLine1 = By.id("field-addressLine1");
-	private final By fieldAddressLine2 = By.id("field-addressLine2");
-	private final By fieldCity = By.id("field-city");
-	private final By fieldState = By.id("field-state");
-	private final By fieldPostalCode = By.id("field-postalCode");
+	private final By fieldName = By.name("customerName");
+	private final By fieldLastName = By.name("contactLastName");
+	private final By fieldContactFirstName = By.name("contactFirstName");
+	private final By fieldPhone = By.name("phone");
+	private final By fieldAddressLine1 = By.name("addressLine1");
+	private final By fieldAddressLine2 = By.name("addressLine2");
+	private final By fieldCity = By.name("city");
+	private final By fieldState = By.name("state");
+	private final By fieldPostalCode = By.name("postalCode");
 	private final By fieldCountry = By.name("country");
+	private final By fieldSalesRepEmployeeNumber = By.name("salesRepEmployeeNumber");
+	private final By fieldDeleted = By.name("deleted");
 	private final By fieldCreditLimit = By.name("creditLimit");
-	private final By btnSave = By.id("form-button-save");
-	private final By message = By.cssSelector("#report-success > p");
-	private final By linkGoBackToList = By.partialLinkText("Go back to list");
+	private final By btnSaveChanges = By.cssSelector("button.btn:nth-child(3)");
 	
 	public AddCustomerPage(WebDriver driver) {
 		this.driver = driver;
 	}
 	
-	public void setName(String name) {
+	public void setCustomerName(String name) {
 		sendKeys(fieldName, name);
 	}
 	
-	public void setLastName(String lastName) {
+	public void setContactLastName(String lastName) {
 		sendKeys(fieldLastName, lastName);
 	}
 	
@@ -65,27 +65,20 @@ public class AddCustomerPage extends BasePage {
 		sendKeys(fieldCountry, country);
 	}
 	
-	public void setFromEmployeer(String employeer) {
-		click(By.cssSelector("#field_salesRepEmployeeNumber_chosen a"));		
-		sendKeys(By.cssSelector("#field_salesRepEmployeeNumber_chosen > div > div > input[type=text]"), employeer);
-		click(By.cssSelector("#field_salesRepEmployeeNumber_chosen > div > ul > li")); 
+	public void setSalesRepEmployeeNumber(String employeer) {
+		sendKeys(fieldSalesRepEmployeeNumber, employeer);
 	}
 	
 	public void setCreditLimit(Double creditLimit) {
 		sendKeys(fieldCreditLimit, String.valueOf(creditLimit));
 	}
-	
-	public void clickSave() {
-		click(btnSave);
+
+	public void setDeleted(Integer deleted) {
+		sendKeys(fieldDeleted, String.valueOf(deleted));
 	}
 	
-	public void clickGoBackToList() {
-		click(linkGoBackToList);
-	}
-	
-	public String getMessage() {
-		waitVisibilityOfElementLocated(message);
-		return getText(message);
+	public void clickSaveChanges() {
+		click(btnSaveChanges);
 	}
 	
 }
